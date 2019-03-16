@@ -62,6 +62,8 @@ public class MainActivity extends FragmentActivity
     private EditText locationEditText;
     private Geocoder geocoder;
     private List<Address> addresses;
+    private Location location;
+
 //    final Geocoder geocoder=new Geocoder(this);
 
 
@@ -92,23 +94,22 @@ public class MainActivity extends FragmentActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Location location;
         geocoder = new Geocoder(this, Locale.getDefault());
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (result == PackageManager.PERMISSION_GRANTED) {
-
-            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
-            try {
-                addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            } catch (IOException e) {
-                e.printStackTrace();
+            location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                try {
+                    addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } else {
         }
 
 
@@ -120,6 +121,11 @@ public class MainActivity extends FragmentActivity
         mapFragment.getMapAsync(this);
 
     }
+
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        this.location = location;
+//    }
 
     @Override
     public void onBackPressed() {
@@ -146,8 +152,7 @@ public class MainActivity extends FragmentActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        switch(id)
-        {
+        switch (id) {
             case R.id.action_settings:
                 break;
         }
@@ -192,7 +197,7 @@ public class MainActivity extends FragmentActivity
         LatLng sydney = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        locationEditText.setText(addresses.get(0).getSubLocality() + "," + addresses.get(0).getPostalCode());
+        locationEditText.setText(addresses.get(0).getSubLocality() + ", " + addresses.get(0).getPostalCode());
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -216,15 +221,13 @@ public class MainActivity extends FragmentActivity
                     e.printStackTrace();
                 }
 //                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                String locality=addresses.get(0).getLocality();
-                String postalcode=addresses.get(0).getPostalCode();
-                if (locality!= null &&  postalcode!= null) {
+                String locality = addresses.get(0).getLocality();
+                String postalcode = addresses.get(0).getPostalCode();
+                if (locality != null && postalcode != null) {
                     locationEditText.setText(addresses.get(0).getLocality() + ", " + addresses.get(0).getPostalCode());
-                }
-                else if(locality!=null){
+                } else if (locality != null) {
                     locationEditText.setText(addresses.get(0).getPostalCode());
-                }
-                else {
+                } else {
                     locationEditText.setText("Location not known ,please type pincode");
                 }
 
@@ -239,9 +242,7 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        if (location != null) {
-
-        }
+        this.location = location;
     }
 
     @Override
