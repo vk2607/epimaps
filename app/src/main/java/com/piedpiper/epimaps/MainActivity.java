@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.main_nav_login) {
                 Intent intent=new Intent(MainActivity.this,HospitalHomeScreen.class);
                 startActivity(intent);
-            // Handle the camera action
+            // Handle the camera a ction
         } else if (id == R.id.main_nav_subscribe) {
 
         } else if (id == R.id.main_nav_feedback) {
