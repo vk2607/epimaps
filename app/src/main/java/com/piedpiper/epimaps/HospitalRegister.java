@@ -66,7 +66,7 @@ public class HospitalRegister extends AppCompatActivity {
             }
         });
 
-        hospitalLocation = (TextView) findViewById(R.id.setlocation_regiser_button);
+//        hospitalLocation = (TextView) findViewById(R.id.setlocation_regiser_button);
         emailEditText = (EditText) findViewById(R.id.email_register_edittext);
         nameEditText = (EditText) findViewById(R.id.name_register_edittext);
         passwordEditText = (EditText) findViewById(R.id.password_register_edittext);
@@ -74,11 +74,11 @@ public class HospitalRegister extends AppCompatActivity {
         uploadCertificatesButton = (Button) findViewById(R.id.uploaddocuments_register_button);
         documentNameEditText = (TextView) findViewById(R.id.documentname_TextView);
 
-        hospitalLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+//        hospitalLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//            }
+//        });
 
         uploadCertificatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
