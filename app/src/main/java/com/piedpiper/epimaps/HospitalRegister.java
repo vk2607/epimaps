@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ public class HospitalRegister extends AppCompatActivity {
     private FirebaseAuth regAuth;
     TextView hospitalLocation, documentNameEditText;
     EditText emailEditText, nameEditText, passwordEditText;
-    Button requestVerificationButton, uploadCertificatesButton;
+    Button requestVerificationButton, uploadCertificatesButton, button;
     String name, email, password;
     private Uri filePath;
     private static final int PICK_IMAGE_REQUEST = 71;
@@ -55,6 +56,15 @@ public class HospitalRegister extends AppCompatActivity {
         regAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
+
+        button = (Button) findViewById(R.id.setlocation_regiser_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HospitalRegister.this, HospitalLocation.class);
+                startActivity(intent);
+            }
+        });
 
         hospitalLocation = (TextView) findViewById(R.id.setlocation_regiser_button);
         emailEditText = (EditText) findViewById(R.id.email_register_edittext);
