@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.main_nav_login) {
             startActivity(new Intent(this, HospitalLogin.class));
-            // Handle the camera action
         } else if (id == R.id.main_nav_subscribe) {
             SubcribeDialog dialog = new SubcribeDialog();
             dialog.show(getFragmentManager(), "subscriber dialog");
