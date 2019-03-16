@@ -1,7 +1,10 @@
 package com.piedpiper.epimaps;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,10 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class HospitalHomeScreen extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, PatientsFragment.OnFragmentInteractionListener {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+    private FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -110,11 +116,28 @@ public class HospitalHomeScreen extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-       /* if (id == R.id.nav_) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+       if (id == R.id.home_nav_logout) {
+           new AlertDialog.Builder(this)
+                   .setIcon(null)
+                   .setTitle("Logout")
+                   .setMessage("Are you sure, Do you want to logged out ?")
+                   .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which) {
+                           firebaseAuth.signOut();
+                           startActivity(new Intent(HospitalHomeScreen.this,MainActivity.class));
+                           finish();
+                       }
+                   })
+                   .setNegativeButton(android.R.string.no,null)
+                   .show();
+        }else if (id == R.id.home_nav_send) {
+           Intent intent=new Intent(Intent.ACTION_SENDTO,Uri.fromParts("mailto","piedpipergeeks@gmail.com",null));
+           intent.putExtra(Intent.EXTRA_SUBJECT,"Feedback about service");
+           startActivity(Intent.createChooser(intent,null));
 
-        } else if (id == R.id.nav_slideshow) {
+
+       }/* else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 

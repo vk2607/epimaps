@@ -172,6 +172,9 @@ public class MainActivity extends FragmentActivity
 
 
         } else if (id == R.id.main_nav_feedback) {
+            Intent intent=new Intent(Intent.ACTION_SENDTO,Uri.fromParts("mailto","piedpipergeeks@gmail.com",null));
+            intent.putExtra(Intent.EXTRA_SUBJECT,"Feedback about service");
+            startActivity(Intent.createChooser(intent,null));
 
         } else if (id == R.id.main_nav_about) {
 
