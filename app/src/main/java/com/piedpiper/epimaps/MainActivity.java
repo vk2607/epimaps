@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -219,11 +218,15 @@ public class MainActivity extends FragmentActivity
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng currentlocation = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(currentlocation).title("Marker at current location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentlocation, 15));
-        locationEditText.setText(addresses.get(0).getSubLocality() + ", " + addresses.get(0).getPostalCode());
+        LatLng sydney = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        try {
+            locationEditText.setText(addresses.get(0).getSubLocality() + "," + addresses.get(0).getPostalCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -265,7 +268,6 @@ public class MainActivity extends FragmentActivity
                     locationEditText.setHint("Location not known ,please type pincode");
 
                 }
-
 //                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
             }
@@ -277,7 +279,6 @@ public class MainActivity extends FragmentActivity
 //            }
 //        });
         highlight();
-//        highlight();
 
 
         // Try to obtain the map from the SupportMapFragment.

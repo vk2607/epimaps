@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -108,13 +109,13 @@ public class AddPatient extends AppCompatActivity {
 
         fsClient = FirebaseFirestore.getInstance();
         String patientId = fsClient.collection("Hospitals")
-                .document("7alsDDlsDn849WXru4eN")
+                .document(FirebaseAuth.getInstance().getUid())
                 .collection("Patients")
                 .document()
                 .getId();
 
         fsClient.collection("Hospitals")
-                .document("7alsDDlsDn849WXru4eN")
+                .document(FirebaseAuth.getInstance().getUid())
                 .collection("Patients")
                 .document(patientId)
                 .set(update);

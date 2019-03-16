@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -30,17 +32,20 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class HospitalRegister extends AppCompatActivity {
     private FirebaseAuth regAuth;
     TextView hospitalLocation, documentNameEditText;
     EditText emailEditText, nameEditText, passwordEditText;
-    Button requestVerificationButton, uploadCertificatesButton;
+    Button requestVerificationButton, uploadCertificatesButton, button;
     String name, email, password;
     private Uri filePath;
     private static final int PICK_IMAGE_REQUEST = 71;
     FirebaseStorage firebaseStorage;
+    FirebaseFirestore fsClient;
     StorageReference storageReference;
 
     @Override
@@ -51,6 +56,15 @@ public class HospitalRegister extends AppCompatActivity {
         regAuth = FirebaseAuth.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getReference();
+
+        button = (Button) findViewById(R.id.setlocation_regiser_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HospitalRegister.this, HospitalLocation.class);
+                startActivity(intent);
+            }
+        });
 
         hospitalLocation = (TextView) findViewById(R.id.setlocation_regiser_button);
         emailEditText = (EditText) findViewById(R.id.email_register_edittext);
@@ -125,6 +139,30 @@ public class HospitalRegister extends AppCompatActivity {
 
     }
 
+    private void uploadDataOnFirestore(String certificateURL) {
+        String userId = regAuth.getUid();
+        String name = this.name;
+        String email = this.email;
+
+        String location = "some LatLng object";
+        String pinCode = "some pincode";
+
+        Map<String, Object> update = new HashMap<>();
+        update.put("userId", userId);
+        update.put("name", name);
+        update.put("email", email);
+        update.put("certificate", certificateURL);
+        update.put("location", location);
+        update.put("pinCode", pinCode);
+        update.put("verified", false);
+
+        fsClient = FirebaseFirestore.getInstance();
+        fsClient.collection("Hospitals")
+                .document(userId)
+                .set(update);
+
+    }
+
     private void uploadDocument() {
         if (filePath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
@@ -141,6 +179,8 @@ public class HospitalRegister extends AppCompatActivity {
                         @Override
                         public void onSuccess(Uri uri) {
                             Log.d("path", uri.toString());
+                            uploadDataOnFirestore(uri.toString());
+
                         }
                     });
                 }

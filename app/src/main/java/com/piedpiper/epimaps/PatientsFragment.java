@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -108,7 +109,7 @@ public class PatientsFragment extends Fragment {
         recyclerView.setAdapter(null);
 
         fsClient.collection("Hospitals")
-                .document("7alsDDlsDn849WXru4eN")
+                .document(FirebaseAuth.getInstance().getUid())
                 .collection("Patients")
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()

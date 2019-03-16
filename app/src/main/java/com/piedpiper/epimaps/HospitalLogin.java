@@ -30,12 +30,10 @@ public class HospitalLogin extends AppCompatActivity {
         setContentView(R.layout.activity_hospital_login);
         lAuth = FirebaseAuth.getInstance();
 
-
         registerHospital = (TextView) findViewById(R.id.register_text);
         loginButton = (Button) findViewById(R.id.signin_button);
         passwordEditText = (EditText) findViewById(R.id.password_signin_editext);
         emailEditText = (EditText) findViewById(R.id.email_signin_edittext);
-
 
         registerHospital.setOnClickListener(new View.OnClickListener() {
             @Override
