@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HospitalRegister">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -39,7 +43,7 @@
 
 
     <EditText
-        android:id="@+id/name_edittext"
+        android:id="@+id/name_register_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -58,7 +62,7 @@
         android:layout_marginTop="36dp"
         android:text="Location"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_edittext" />
+        app:layout_constraintTop_toBottomOf="@+id/password_register_edittext" />
 
     <Button
         android:id="@+id/uploaddocuments_register_button"
@@ -70,18 +74,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setlocation_regiser_button" />
 
-    <Button
-        android:id="@+id/requestverification_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="48dp"
-        android:text="Request Verification"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uploaddocuments_register_button" />
+        <Button
+            android:id="@+id/requestverification_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="Request Verification"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/documentname_TextView" />
 
     <EditText
-        android:id="@+id/email_edittext"
+        android:id="@+id/email_register_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -90,10 +94,10 @@
         android:hint="Email"
         android:inputType="textEmailAddress"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_edittext" />
+        app:layout_constraintTop_toBottomOf="@+id/name_register_edittext" />
 
     <EditText
-        android:id="@+id/password_edittext"
+        android:id="@+id/password_register_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -102,5 +106,18 @@
         android:hint="Set paasword"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email_edittext" />
-</android.support.constraint.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/email_register_edittext" />
+
+        <TextView
+            android:id="@+id/documentname_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/uploaddocuments_register_button" />
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>
