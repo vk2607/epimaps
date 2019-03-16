@@ -14,6 +14,13 @@
             android:label="@string/title_activity_hospital_home_screen"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
+            android:name=".HospitalRegister"
+            android:label="Registration"
+            android:parentActivityName=".HospitalLogin" />
+        <activity
+            android:name=".HospitalLogin"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
