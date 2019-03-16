@@ -213,23 +213,31 @@ public class MainActivity extends FragmentActivity
             @Override
             public void onMapClick(LatLng latLng) {
                 mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Location"));
                 try {
-
+                    mMap.addMarker(new MarkerOptions().position(latLng).title("Location"));
                     addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                    String locality = addresses.get(0).getLocality();
+                    String postalcode = addresses.get(0).getPostalCode();
+                    if (locality != null && postalcode != null) {
+                        locationEditText.setText(addresses.get(0).getLocality() + ", " + addresses.get(0).getPostalCode());
+                    } else if (locality != null) {
+                        locationEditText.setText(addresses.get(0).getPostalCode());
+                    } else {
+                        locationEditText.setText(null);
+                        locationEditText.setHint("Location not known ,please type pincode");
+                    }
+
                 } catch (IOException e) {
+                    locationEditText.setText(null);
+                    locationEditText.setHint("Location not known ,please type pincode");
                     e.printStackTrace();
+                } catch (IndexOutOfBoundsException e) {
+                    locationEditText.setText(null);
+                    e.printStackTrace();
+                    locationEditText.setHint("Location not known ,please type pincode");
+
                 }
 //                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                String locality = addresses.get(0).getLocality();
-                String postalcode = addresses.get(0).getPostalCode();
-                if (locality != null && postalcode != null) {
-                    locationEditText.setText(addresses.get(0).getLocality() + ", " + addresses.get(0).getPostalCode());
-                } else if (locality != null) {
-                    locationEditText.setText(addresses.get(0).getPostalCode());
-                } else {
-                    locationEditText.setText("Location not known ,please type pincode");
-                }
 
             }
         });
