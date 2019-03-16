@@ -77,8 +77,8 @@ public class MainActivity extends FragmentActivity
 //        toolbar.setTitle("Map");
 //        setSupportActionBar(toolbar);
 
-        Toast.makeText(this,"In main",Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this,Graph.class));
+//        Toast.makeText(this,"In main",Toast.LENGTH_SHORT).show();
+//        startActivity(new Intent(this,Graph.class));
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
