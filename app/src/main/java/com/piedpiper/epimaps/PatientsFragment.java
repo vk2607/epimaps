@@ -1,15 +1,18 @@
 package com.piedpiper.epimaps;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 //import android.support.v4.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
@@ -78,6 +81,15 @@ public class PatientsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
          v=inflater.inflate(R.layout.fragment_patients, container, false);
+
+         FloatingActionButton addPatientButton = (FloatingActionButton) v.findViewById(R.id.add_patient_button);
+         addPatientButton.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 startActivity(new Intent(getActivity(), AddPatient.class));
+             }
+         });
+
         recyclerView = (RecyclerView) v.findViewById(R.id.patients_recycler_view);
         manager = new LinearLayoutManager(getActivity());
         Patient patient=new Patient();

@@ -23,15 +23,23 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+import android.graphics.*;
+import android.graphics.Paint.Style;
+import android.graphics.Region.Op;
+import android.os.Bundle;
 import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.protobuf.DescriptorProtos;
 
 import java.io.IOException;
 import java.util.List;
@@ -83,24 +91,23 @@ public class MainActivity extends FragmentActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location location;
         geocoder = new Geocoder(this, Locale.getDefault());
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (result == PackageManager.PERMISSION_GRANTED) {
-
             location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {
-                longitude = location.getLongitude();
                 latitude = location.getLatitude();
+                longitude = location.getLongitude();
                 try {
                     addresses = geocoder.getFromLocation(latitude, longitude, 1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        } else {
         }
 
 
@@ -108,10 +115,15 @@ public class MainActivity extends FragmentActivity
 //        fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.commit();
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_Fragment);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
 
     }
+
+//    @Override
+//    public void onLocationChanged(Location location) {
+//        this.location = location;
+//    }
 
     @Override
     public void onBackPressed() {
@@ -138,8 +150,7 @@ public class MainActivity extends FragmentActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        switch(id)
-        {
+        switch (id) {
             case R.id.action_settings:
                 break;
         }
@@ -205,25 +216,31 @@ public class MainActivity extends FragmentActivity
             @Override
             public void onMapClick(LatLng latLng) {
                 mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(latLng).title("Location"));
                 try {
-
+                    mMap.addMarker(new MarkerOptions().position(latLng).title("Location"));
                     addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                    String locality = addresses.get(0).getLocality();
+                    String postalcode = addresses.get(0).getPostalCode();
+                    if (locality != null && postalcode != null) {
+                        locationEditText.setText(addresses.get(0).getLocality() + ", " + addresses.get(0).getPostalCode());
+                    } else if (locality != null) {
+                        locationEditText.setText(addresses.get(0).getPostalCode());
+                    } else {
+                        locationEditText.setText(null);
+                        locationEditText.setHint("Location not known ,please type pincode");
+                    }
+
                 } catch (IOException e) {
+                    locationEditText.setText(null);
+                    locationEditText.setHint("Location not known ,please type pincode");
                     e.printStackTrace();
+                } catch (IndexOutOfBoundsException e) {
+                    locationEditText.setText(null);
+                    e.printStackTrace();
+                    locationEditText.setHint("Location not known ,please type pincode");
+
                 }
 //                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                String locality=addresses.get(0).getLocality();
-                String postalcode=addresses.get(0).getPostalCode();
-                if (locality!= null &&  postalcode!= null) {
-                    locationEditText.setText(addresses.get(0).getLocality() + ", " + addresses.get(0).getPostalCode());
-                }
-                else if(locality!=null){
-                    locationEditText.setText(addresses.get(0).getPostalCode());
-                }
-                else {
-                    locationEditText.setText("Location not known ,please type pincode");
-                }
 
             }
         });
