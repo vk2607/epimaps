@@ -55,9 +55,19 @@ public class HospitalRegister extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()) {
-                                Toast.makeText(HospitalRegister.this, "Click on the verification link and sign in", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(HospitalRegister.this, HospitalLogin.class);
-                                startActivity(intent);
+                               regAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                   @Override
+                                   public void onComplete(@NonNull Task<Void> task) {
+                                       if(task.isSuccessful()){
+                                           Toast.makeText(HospitalRegister.this, "Click on the verification link and sign in", Toast.LENGTH_SHORT).show();
+                                           Intent intent = new Intent(HospitalRegister.this, HospitalLogin.class);
+                                           startActivity(intent);
+                                       }
+                                       else{
+                                           Toast.makeText(HospitalRegister.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                       }
+                                   }
+                               });
                             }
                             else{
                                 Toast.makeText(HospitalRegister.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -66,6 +76,9 @@ public class HospitalRegister extends AppCompatActivity {
                         }
                     });
 
+                }
+                else {
+                    Toast.makeText(HospitalRegister.this, "Fill all the information", Toast.LENGTH_SHORT).show();
                 }
             }
         });
