@@ -19,6 +19,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -41,9 +42,11 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -80,6 +83,7 @@ public class MainActivity extends FragmentActivity
         mAuth = FirebaseAuth.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         locationEditText = (EditText) findViewById(R.id.locationname_edittext);
+        locationEditText.getBackground().setColorFilter(Color.RED,PorterDuff.Mode.SRC_ATOP);
 //        toolbar.setTitle("Map");
 //        setSupportActionBar(toolbar);
 
@@ -218,7 +222,7 @@ public class MainActivity extends FragmentActivity
         LatLng currentlocation = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(currentlocation).title("Marker at current location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentlocation,15));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentlocation, 15));
         locationEditText.setText(addresses.get(0).getSubLocality() + ", " + addresses.get(0).getPostalCode());
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -235,7 +239,9 @@ public class MainActivity extends FragmentActivity
             @Override
             public void onMapClick(LatLng latLng) {
                 mMap.clear();
+                highlight();
                 try {
+                    Log.d("zoom", String.valueOf(mMap.getCameraPosition().zoom));
                     mMap.addMarker(new MarkerOptions().position(latLng).title("Location"));
                     addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
                     String locality = addresses.get(0).getLocality();
@@ -259,11 +265,19 @@ public class MainActivity extends FragmentActivity
                     locationEditText.setHint("Location not known ,please type pincode");
 
                 }
+
 //                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
             }
         });
+//        mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+//            @Override
+//            public void onCameraMove() {
+//
+//            }
+//        });
         highlight();
+//        highlight();
 
 
         // Try to obtain the map from the SupportMapFragment.
@@ -291,13 +305,17 @@ public class MainActivity extends FragmentActivity
     }
 
     public void highlight() {
-//        CircleOptions circleOptions = new CircleOptions()
-//                .center(new LatLng(latitude, longitude))
-//                .radius(100)
-//                .fillColor(Color.RED);
-//
-//        Circle circle = mMap.addCircle(circleOptions);
-//        mMap.an
+        LatLng loc=new LatLng(latitude,longitude);
+        mMap.addMarker(new MarkerOptions().position(loc).title("Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                startActivity(new Intent(MainActivity.this,Graph.class));
+                return false;
+            }
+        });
+
+
     }
 
     public void getPosition() {
