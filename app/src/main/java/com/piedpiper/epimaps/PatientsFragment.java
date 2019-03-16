@@ -6,14 +6,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 //import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -32,6 +41,7 @@ public class PatientsFragment extends Fragment {
     LinearLayoutManager manager;
     PatientAdapter patientAdapter;
     Boolean isScrolling = false;
+    FirebaseFirestore fsClient;
     ArrayList<Patient> display_list = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
@@ -74,34 +84,47 @@ public class PatientsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        fsClient = FirebaseFirestore.getInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         v=inflater.inflate(R.layout.fragment_patients, container, false);
+        v = inflater.inflate(R.layout.fragment_patients, container, false);
 
-         FloatingActionButton addPatientButton = (FloatingActionButton) v.findViewById(R.id.add_patient_button);
-         addPatientButton.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View view) {
-                 startActivity(new Intent(getActivity(), AddPatient.class));
-             }
-         });
+        FloatingActionButton addPatientButton = (FloatingActionButton) v.findViewById(R.id.add_patient_button);
+        addPatientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AddPatient.class));
+            }
+        });
 
         recyclerView = (RecyclerView) v.findViewById(R.id.patients_recycler_view);
         manager = new LinearLayoutManager(getActivity());
-        Patient patient=new Patient();
-        patient.setPatientName("Mr.XYZ");
-        patient.setDiseaseName("SwineFlu");
-        for(int i=0;i<15;i++)
-        {
-            display_list.add(patient);
-        }
-        patientAdapter=new PatientAdapter(display_list,getActivity());
-        recyclerView.setAdapter(patientAdapter);
         recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(null);
+
+        fsClient.collection("Hospitals")
+                .document("7alsDDlsDn849WXru4eN")
+                .collection("Patients")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot snapshot : task.getResult()) {
+                                Patient patient = snapshot.toObject(Patient.class);
+                                Log.d("PATIENT", patient.getName());
+                                display_list.add(patient);
+                            }
+                            patientAdapter = new PatientAdapter(display_list, getActivity());
+                            recyclerView.setAdapter(patientAdapter);
+                        }
+                    }
+                });
+
         return v;
     }
 

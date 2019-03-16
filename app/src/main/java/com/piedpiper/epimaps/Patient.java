@@ -1,22 +1,52 @@
 package com.piedpiper.epimaps;
 
+import com.google.firebase.Timestamp;
+
+import java.util.ArrayList;
+
 public class Patient {
-    private String patientName;
-    private String diseaseName;
+    private String name, disease;
+    private Boolean isValid;
+    private Timestamp timestamp;
+    private ArrayList<String> symptoms = new ArrayList<>();
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public void setDiseaseName(String diseaseName) {
-        this.diseaseName = diseaseName;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public void setSymptoms(ArrayList<String> symptoms) {
+        this.symptoms = symptoms;
     }
 
-    public String getDiseaseName() {
-        return diseaseName;
+    public ArrayList<String> getSymptoms() {
+        return symptoms;
+    }
+
+    public void setValid(Boolean valid) {
+        isValid = valid;
+    }
+
+    public Boolean getValid() {
+        return isValid;
+    }
+
+    public void setName(String patientName) {
+        this.name = patientName;
+    }
+
+    public void setDisease(String diseaseName) {
+        this.disease = diseaseName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDisease() {
+        return disease;
     }
 }

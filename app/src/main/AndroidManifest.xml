@@ -41,7 +41,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <activity android:name=".AddPatient"></activity>
+        <activity android:name=".AddPatient"
+            android:parentActivityName=".HospitalHomeScreen"></activity>
         <activity
             android:name=".HospitalHomeScreen"
             android:label="@string/title_activity_hospital_home_screen"

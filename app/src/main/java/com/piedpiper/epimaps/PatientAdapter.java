@@ -31,8 +31,8 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.VHolder>
     public void onBindViewHolder(@NonNull final VHolder vHolder, int position) {
     Patient patient=patients.get(pos);
     pos=position;
-    vHolder.name.setText(patient.getPatientName());
-    vHolder.disease.setText(patient.getDiseaseName());
+    vHolder.name.setText(patient.getName());
+    vHolder.disease.setText(patient.getDisease());
 
     }
 
