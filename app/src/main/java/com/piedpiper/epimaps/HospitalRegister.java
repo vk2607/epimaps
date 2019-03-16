@@ -34,10 +34,10 @@ import java.util.UUID;
 
 public class HospitalRegister extends AppCompatActivity {
     private FirebaseAuth regAuth;
-    TextView hospitalLocation,documentNameEditText;
-    EditText emailEditText,nameEditText,passwordEditText;
-    Button requestVerificationButton,uploadCertificatesButton;
-    String name,email,password;
+    TextView hospitalLocation, documentNameEditText;
+    EditText emailEditText, nameEditText, passwordEditText;
+    Button requestVerificationButton, uploadCertificatesButton;
+    String name, email, password;
     private Uri filePath;
     private static final int PICK_IMAGE_REQUEST = 71;
     FirebaseStorage firebaseStorage;
@@ -47,30 +47,33 @@ public class HospitalRegister extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hospital_register);
-        regAuth = FirebaseAuth.getInstance();
-        firebaseStorage=FirebaseStorage.getInstance();
-        storageReference=firebaseStorage.getReference();
-        hospitalLocation=(TextView)findViewById(R.id.setlocation_regiser_button);
-        emailEditText=(EditText)findViewById(R.id.email_register_edittext);
-        nameEditText=(EditText)findViewById(R.id.name_register_edittext);
-        passwordEditText=(EditText)findViewById(R.id.password_register_edittext);
-        requestVerificationButton=(Button)findViewById(R.id.requestverification_button);
-        uploadCertificatesButton=(Button)findViewById(R.id.uploaddocuments_register_button);
-        documentNameEditText=(TextView) findViewById(R.id.documentname_TextView);
 
+        regAuth = FirebaseAuth.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference();
+
+        hospitalLocation = (TextView) findViewById(R.id.setlocation_regiser_button);
+        emailEditText = (EditText) findViewById(R.id.email_register_edittext);
+        nameEditText = (EditText) findViewById(R.id.name_register_edittext);
+        passwordEditText = (EditText) findViewById(R.id.password_register_edittext);
+        requestVerificationButton = (Button) findViewById(R.id.requestverification_button);
+        uploadCertificatesButton = (Button) findViewById(R.id.uploaddocuments_register_button);
+        documentNameEditText = (TextView) findViewById(R.id.documentname_TextView);
 
         hospitalLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
-        emailAuthentcation();
+
         uploadCertificatesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 documentSelect();
             }
         });
+
+        emailAuthentication();
 
     }
 
@@ -82,42 +85,39 @@ public class HospitalRegister extends AppCompatActivity {
 
     }
 
-    private void emailAuthentcation() {
+    private void emailAuthentication() {
         requestVerificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                email=emailEditText.getText().toString();
-                password=passwordEditText.getText().toString();
-                name=nameEditText.getText().toString();
-                if(!email.isEmpty() && !name.isEmpty()&& !password.isEmpty() && filePath!=null){
-                    regAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(HospitalRegister.this, new OnCompleteListener<AuthResult>() {
+                email = emailEditText.getText().toString();
+                password = passwordEditText.getText().toString();
+                name = nameEditText.getText().toString();
+                if (!email.isEmpty() && !name.isEmpty() && !password.isEmpty() && filePath != null) {
+                    regAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(HospitalRegister.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()) {
-                               regAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                   @Override
-                                   public void onComplete(@NonNull Task<Void> task) {
-                                       if(task.isSuccessful()){
-                                           uploadDocument();
-                                           Toast.makeText(HospitalRegister.this, "Click on the verification link and sign in", Toast.LENGTH_SHORT).show();
-                                           Intent intent = new Intent(HospitalRegister.this, HospitalLogin.class);
-                                           startActivity(intent);
-                                       }
-                                       else{
-                                           Toast.makeText(HospitalRegister.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                       }
-                                   }
-                               });
-                            }
-                            else{
+                            if (task.isSuccessful()) {
+                                regAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            uploadDocument();
+                                            Toast.makeText(HospitalRegister.this, "Click on the verification link and sign in", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(HospitalRegister.this, HospitalLogin.class);
+                                            startActivity(intent);
+                                        } else {
+                                            Toast.makeText(HospitalRegister.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            } else {
                                 Toast.makeText(HospitalRegister.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
                             }
                         }
                     });
 
-                }
-                else {
+                } else {
                     Toast.makeText(HospitalRegister.this, "Fill all the information", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -126,21 +126,21 @@ public class HospitalRegister extends AppCompatActivity {
     }
 
     private void uploadDocument() {
-        if(filePath!=null){
-            final ProgressDialog progressDialog=new ProgressDialog(this);
-            progressDialog.setTitle("Uploading....");
+        if (filePath != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            final StorageReference reference=storageReference.child("Images/"+ UUID.randomUUID().toString());
+            final StorageReference reference = storageReference.child("Images/" + UUID.randomUUID().toString());
             reference.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     progressDialog.dismiss();
-                    Toast.makeText(HospitalRegister.this,"Uploaded",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HospitalRegister.this, "Uploaded", Toast.LENGTH_SHORT).show();
                     documentNameEditText.setVisibility(View.GONE);
                     reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            Log.d("path",uri.toString());
+                            Log.d("path", uri.toString());
                         }
                     });
                 }
@@ -149,14 +149,14 @@ public class HospitalRegister extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(HospitalRegister.this,e.getMessage().toString(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(HospitalRegister.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress=(100*taskSnapshot.getBytesTransferred()/(double)taskSnapshot.getTotalByteCount());
-                            progressDialog.setMessage("Uploading "+(int)progress+"%");
+                            double progress = (100 * taskSnapshot.getBytesTransferred() / (double) taskSnapshot.getTotalByteCount());
+                            progressDialog.setMessage("Uploading " + (int) progress + "%");
 
                         }
                     });
@@ -167,26 +167,24 @@ public class HospitalRegister extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath=data.getData();
-            try{
-                Bitmap bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(),filePath);
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
 //                String filename=filePath.substring(filePath.lastIndexOf("/")+1);
-                File file=new File(""+filePath);
+                File file = new File("" + filePath);
 
-                ByteArrayOutputStream stream=new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
-                byte[] imageinByte =stream.toByteArray();
-                long sizeOfImage=imageinByte.length/1024;
-                if(sizeOfImage<1024){
-                    documentNameEditText.setText(file.getName().substring(file.getName().lastIndexOf("%")+1));
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] imageinByte = stream.toByteArray();
+                long sizeOfImage = imageinByte.length / 1024;
+                if (sizeOfImage < 1024) {
+                    documentNameEditText.setText(file.getName().substring(file.getName().lastIndexOf("%") + 1));
                     documentNameEditText.setVisibility(View.VISIBLE);
 
+                } else {
+                    Toast.makeText(HospitalRegister.this, "Size should be less than 1MB", Toast.LENGTH_SHORT).show();
                 }
-                else{
-                    Toast.makeText(HospitalRegister.this,"Size should be less than 1MB",Toast.LENGTH_SHORT).show();
-                }
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
