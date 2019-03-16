@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,37 +13,25 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-import android.graphics.*;
-import android.graphics.Paint.Style;
-import android.graphics.Region.Op;
-import android.os.Bundle;
 import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.protobuf.DescriptorProtos;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,12 +49,16 @@ public class MainActivity extends FragmentActivity
     private EditText locationEditText;
     private Geocoder geocoder;
     private List<Address> addresses;
+    private Location location;
 //    final Geocoder geocoder=new Geocoder(this);
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       // Intent intent=new Intent(MainActivity.this,HospitalRegister.class);
+        //MainActivity.this.startActivity(intent);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         locationEditText = (EditText) findViewById(R.id.locationname_edittext);
 //        toolbar.setTitle("Map");
@@ -92,7 +83,6 @@ public class MainActivity extends FragmentActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Location location;
         geocoder = new Geocoder(this, Locale.getDefault());
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -100,13 +90,15 @@ public class MainActivity extends FragmentActivity
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (result == PackageManager.PERMISSION_GRANTED) {
 
-            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
-            try {
-                addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            } catch (IOException e) {
-                e.printStackTrace();
+            location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                longitude = location.getLongitude();
+                latitude = location.getLatitude();
+                try {
+                    addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
         }
@@ -116,7 +108,7 @@ public class MainActivity extends FragmentActivity
 //        fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.commit();
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_Fragment);
         mapFragment.getMapAsync(this);
 
     }
@@ -192,7 +184,12 @@ public class MainActivity extends FragmentActivity
         LatLng sydney = new LatLng(latitude, longitude);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        locationEditText.setText(addresses.get(0).getSubLocality() + "," + addresses.get(0).getPostalCode());
+
+        try {
+            locationEditText.setText(addresses.get(0).getSubLocality() + "," + addresses.get(0).getPostalCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -239,9 +236,7 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        if (location != null) {
-
-        }
+        this.location = location;
     }
 
     @Override
