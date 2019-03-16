@@ -45,6 +45,9 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.List;
@@ -63,7 +66,9 @@ public class MainActivity extends FragmentActivity
     private Geocoder geocoder;
     private List<Address> addresses;
     private Location location;
-
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
+    FirebaseFirestore fsClient;
 //    final Geocoder geocoder=new Geocoder(this);
 
 
@@ -72,6 +77,7 @@ public class MainActivity extends FragmentActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         locationEditText = (EditText) findViewById(R.id.locationname_edittext);
 //        toolbar.setTitle("Map");
@@ -123,7 +129,18 @@ public class MainActivity extends FragmentActivity
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
+        defaultLogin();
 
+    }
+
+    private void defaultLogin() {
+        currentUser=mAuth.getCurrentUser();
+        String userId;
+        if (currentUser != null && currentUser.isEmailVerified()) {
+            userId = currentUser.getUid();
+            startActivity(new Intent(MainActivity.this, HospitalHomeScreen.class));
+            finish();
+        }
     }
 
 //    @Override

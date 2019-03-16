@@ -7,7 +7,7 @@
     tools:context=".HospitalLogin">
 
     <EditText
-        android:id="@+id/login_text"
+        android:id="@+id/email_signin_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="96dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/password_test"
+        android:id="@+id/password_signin_editext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="96dp"
@@ -28,7 +28,7 @@
         android:hint="password"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_text" />
+        app:layout_constraintTop_toBottomOf="@+id/email_signin_edittext" />
 
     <TextView
         android:id="@+id/register_text"
@@ -59,6 +59,6 @@
         android:layout_marginTop="24dp"
         android:text="Sign in"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_test" />
+        app:layout_constraintTop_toBottomOf="@+id/password_signin_editext" />
 
 </android.support.constraint.ConstraintLayout>
