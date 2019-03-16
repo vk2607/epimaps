@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity
 //        toolbar.setTitle("Map");
         setSupportActionBar(toolbar);
 
+
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -86,10 +87,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.main_nav_login) {
-                Intent intent=new Intent(MainActivity.this,HospitalHomeScreen.class);
-                startActivity(intent);
-            // Handle the camera a ction
+            startActivity(new Intent(this, HospitalLogin.class));
         } else if (id == R.id.main_nav_subscribe) {
+            SubcribeDialog dialog = new SubcribeDialog();
+            dialog.show(getFragmentManager(), "subscriber dialog");
+
 
         } else if (id == R.id.main_nav_feedback) {
 
