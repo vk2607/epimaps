@@ -5,10 +5,11 @@ import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 
 public class Patient {
-    private String name, disease;
+    private String name;
     private Boolean isValid;
     private Timestamp timestamp;
     private ArrayList<String> symptoms = new ArrayList<>();
+    private ArrayList<String> diseases = new ArrayList<>();
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
@@ -20,6 +21,14 @@ public class Patient {
 
     public void setSymptoms(ArrayList<String> symptoms) {
         this.symptoms = symptoms;
+    }
+
+    public void setDiseases(ArrayList<String> diseases) {
+        this.diseases = diseases;
+    }
+
+    public ArrayList<String> getDiseases() {
+        return diseases;
     }
 
     public ArrayList<String> getSymptoms() {
@@ -38,15 +47,15 @@ public class Patient {
         this.name = patientName;
     }
 
-    public void setDisease(String diseaseName) {
-        this.disease = diseaseName;
-    }
+//    public void setDisease(String diseaseName) {
+//        this.disease = diseaseName;
+//    }
 
     public String getName() {
         return name;
     }
 
-    public String getDisease() {
-        return disease;
-    }
+//    public String getDisease() {
+//        return disease;
+//    }
 }

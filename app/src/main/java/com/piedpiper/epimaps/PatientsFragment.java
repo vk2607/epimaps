@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -109,6 +110,7 @@ public class PatientsFragment extends Fragment {
         fsClient.collection("Hospitals")
                 .document("7alsDDlsDn849WXru4eN")
                 .collection("Patients")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -116,7 +118,7 @@ public class PatientsFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (DocumentSnapshot snapshot : task.getResult()) {
                                 Patient patient = snapshot.toObject(Patient.class);
-                                Log.d("PATIENT", patient.getName());
+//                                Log.d("PATIENT", patient.getName());
                                 display_list.add(patient);
                             }
                             patientAdapter = new PatientAdapter(display_list, getActivity());

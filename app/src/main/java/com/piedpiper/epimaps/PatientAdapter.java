@@ -11,14 +11,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.VHolder> {
-    ArrayList<Patient>patients;
+    ArrayList<Patient> patients;
     Context context;
-    int pos;
-    public PatientAdapter(ArrayList<Patient>patients,Context context)
-    {
-        this.patients=patients;
-        this.context=context;
+
+    public PatientAdapter(ArrayList<Patient> patients, Context context) {
+        this.patients = patients;
+        this.context = context;
     }
+
     @NonNull
     @Override
     public PatientAdapter.VHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -29,11 +29,13 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.VHolder>
 
     @Override
     public void onBindViewHolder(@NonNull final VHolder vHolder, int position) {
-    Patient patient=patients.get(pos);
-    pos=position;
-    vHolder.name.setText(patient.getName());
-    vHolder.disease.setText(patient.getDisease());
+        Patient patient = patients.get(position);
+        vHolder.name.setText(patient.getName());
+        try {
+            vHolder.disease.setText(patient.getDiseases().get(0));
+        } catch (IndexOutOfBoundsException e) {
 
+        }
     }
 
     @Override
@@ -42,11 +44,12 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.VHolder>
     }
 
     public class VHolder extends RecyclerView.ViewHolder {
-        TextView name,disease;
+        TextView name, disease;
+
         public VHolder(@NonNull View itemView) {
             super(itemView);
-            name=(TextView)itemView.findViewById(R.id.patientName_text);
-            disease=(TextView)itemView.findViewById(R.id.diseaseName_text);
+            name = (TextView) itemView.findViewById(R.id.patientName_text);
+            disease = (TextView) itemView.findViewById(R.id.diseaseName_text);
         }
     }
 }
