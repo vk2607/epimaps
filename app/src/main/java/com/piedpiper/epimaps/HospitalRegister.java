@@ -20,9 +20,9 @@ public class HospitalRegister extends AppCompatActivity {
     private FirebaseAuth regAuth;
     TextView hospitalLocation;
     Button button;
-    EditText emailEditText,nameEditText,passwordEditText;
+    EditText emailEditText, nameEditText, passwordEditText;
     Button requestVerificationButton;
-    String name,email,password;
+    String name, email, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,27 +30,27 @@ public class HospitalRegister extends AppCompatActivity {
         setContentView(R.layout.activity_hospital_register);
         regAuth = FirebaseAuth.getInstance();
 
-        button=(Button)findViewById(R.id.location_btn);
+        button = (Button) findViewById(R.id.setlocation_regiser_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(HospitalRegister.this,HospitalLocation.class);
-                HospitalRegister.this.startActivity(intent);
-
+                Intent intent = new Intent(HospitalRegister.this, HospitalLocation.class);
+                startActivity(intent);
             }
         });
-                hospitalLocation=(TextView)findViewById(R.id.setlocation_regiser_button);
-        emailEditText=(EditText)findViewById(R.id.email_edittext);
-        nameEditText=(EditText)findViewById(R.id.name_edittext);
-        passwordEditText=(EditText)findViewById(R.id.password_edittext);
-        requestVerificationButton=(Button)findViewById(R.id.requestverification_button);
+        hospitalLocation = (TextView) findViewById(R.id.setlocation_regiser_button);
+        emailEditText = (EditText) findViewById(R.id.email_edittext);
+        nameEditText = (EditText) findViewById(R.id.name_edittext);
+        passwordEditText = (EditText) findViewById(R.id.password_edittext);
+        requestVerificationButton = (Button) findViewById(R.id.requestverification_button);
 
 
-        hospitalLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+//        hospitalLocation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
         emailAuthentcation();
 
     }
@@ -59,37 +59,34 @@ public class HospitalRegister extends AppCompatActivity {
         requestVerificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                email=emailEditText.getText().toString();
-                password=passwordEditText.getText().toString();
-                name=nameEditText.getText().toString();
-                if(!email.isEmpty() && !name.isEmpty()&& !password.isEmpty()){
-                    regAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(HospitalRegister.this, new OnCompleteListener<AuthResult>() {
+                email = emailEditText.getText().toString();
+                password = passwordEditText.getText().toString();
+                name = nameEditText.getText().toString();
+                if (!email.isEmpty() && !name.isEmpty() && !password.isEmpty()) {
+                    regAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(HospitalRegister.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()) {
-                               regAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                   @Override
-                                   public void onComplete(@NonNull Task<Void> task) {
-                                       if(task.isSuccessful()){
-                                           Toast.makeText(HospitalRegister.this, "Click on the verification link and sign in", Toast.LENGTH_SHORT).show();
-                                           Intent intent = new Intent(HospitalRegister.this, HospitalLogin.class);
-                                           startActivity(intent);
-                                       }
-                                       else{
-                                           Toast.makeText(HospitalRegister.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                       }
-                                   }
-                               });
-                            }
-                            else{
+                            if (task.isSuccessful()) {
+                                regAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(HospitalRegister.this, "Click on the verification link and sign in", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(HospitalRegister.this, HospitalLogin.class);
+                                            startActivity(intent);
+                                        } else {
+                                            Toast.makeText(HospitalRegister.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            } else {
                                 Toast.makeText(HospitalRegister.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 
                             }
                         }
                     });
 
-                }
-                else {
+                } else {
                     Toast.makeText(HospitalRegister.this, "Fill all the information", Toast.LENGTH_SHORT).show();
                 }
             }

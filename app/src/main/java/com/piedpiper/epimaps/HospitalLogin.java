@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class HospitalLogin extends AppCompatActivity {
 
@@ -21,10 +22,10 @@ public class HospitalLogin extends AppCompatActivity {
         registerHospital=(TextView)findViewById(R.id.register_text);
         loginButton=(Button)findViewById(R.id.signin_button);
 
-
         registerHospital.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(HospitalLogin.this, "Register clicked", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(HospitalLogin.this,HospitalRegister.class));
             }
         });

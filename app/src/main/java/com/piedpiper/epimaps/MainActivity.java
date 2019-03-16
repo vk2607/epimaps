@@ -63,9 +63,9 @@ public class MainActivity extends FragmentActivity
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-       // Intent intent=new Intent(MainActivity.this,HospitalRegister.class);
-        //MainActivity.this.startActivity(intent);
+        setContentView(R.layout.activity_main) ;
+        // Intent intent=new Intent(MainActivity.this,HospitalRegister.class);
+       // MainActivity.this.startActivity(intent);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         locationEditText = (EditText) findViewById(R.id.locationname_edittext);

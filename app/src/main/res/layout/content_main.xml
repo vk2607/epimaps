@@ -9,7 +9,7 @@
     tools:showIn="@layout/app_bar_main">
 
     <fragment
-        android:id="@+id/map_Fragment"
+        android:id="@+id/map_fragment"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,6 +33,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/map_Fragment" />
+        app:layout_constraintTop_toTopOf="@+id/map_fragment" />
 
 </android.support.constraint.ConstraintLayout>
