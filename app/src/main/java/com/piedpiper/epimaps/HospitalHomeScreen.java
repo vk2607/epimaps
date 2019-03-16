@@ -31,7 +31,7 @@ public class HospitalHomeScreen extends AppCompatActivity
                     fragmentTransaction.replace(R.id.fragment_area, new PatientsFragment());
                     fragmentTransaction.commit();
                     return true;
-
+                case R.id.navigation_map:
             }
             return false;
         }
@@ -46,6 +46,9 @@ public class HospitalHomeScreen extends AppCompatActivity
         setSupportActionBar(toolbar);
         fragmentManager = getFragmentManager();
 
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_area, new PatientsFragment());
+        fragmentTransaction.commit();
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
