@@ -84,9 +84,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.main_nav_login) {
-            startActivity(new Intent(this,HospitalLogin.class));
+            startActivity(new Intent(this, HospitalLogin.class));
             // Handle the camera action
         } else if (id == R.id.main_nav_subscribe) {
+            SubcribeDialog dialog = new SubcribeDialog();
+            dialog.show(getFragmentManager(), "subscriber dialog");
+
 
         } else if (id == R.id.main_nav_feedback) {
 

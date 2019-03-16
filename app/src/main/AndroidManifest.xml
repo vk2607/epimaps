@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Location"
-            android:label="Location" />
-        <activity
             android:name=".HospitalRegister"
             android:label="Registration"
             android:parentActivityName=".HospitalLogin" />

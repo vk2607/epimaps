@@ -20,7 +20,6 @@ public class HospitalRegister extends AppCompatActivity {
         hospitalLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(HospitalRegister.this,Location.class));
             }
         });
     }
