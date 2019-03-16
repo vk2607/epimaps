@@ -27,7 +27,6 @@ public class HospitalHomeScreen extends AppCompatActivity
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.navigation_patient:
-                    Toast.makeText(HospitalHomeScreen.this, "ABC", Toast.LENGTH_SHORT).show();
                     fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_area, new PatientsFragment());
                     fragmentTransaction.commit();
