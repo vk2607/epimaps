@@ -211,9 +211,10 @@ public class MainActivity extends FragmentActivity
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng currentlocation = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(currentlocation).title("Marker at current location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentlocation,15));
         locationEditText.setText(addresses.get(0).getSubLocality() + ", " + addresses.get(0).getPostalCode());
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
