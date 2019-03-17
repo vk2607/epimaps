@@ -28,9 +28,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".HospitalLocation"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name=".Graph"></activity>
 
-        <activity android:name=".HospitalLocation"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

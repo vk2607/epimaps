@@ -176,21 +176,27 @@ public class HospitalLocation extends AppCompatActivity implements OnMapReadyCal
     private Geocoder geocoder;
     private List<Address> addresses;
     private Location location;
+    private String name, email, password;
 //    final Geocoder geocoder=new Geocoder(this);
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main) ;
+        setContentView(R.layout.activity_hospital_location) ;
+
+        Intent intent = getIntent();
+        email = intent.getStringExtra("email");
+        password = intent.getStringExtra("password");
+        name = intent.getStringExtra("name");
 
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location;
         geocoder = new Geocoder(this, Locale.getDefault());
 
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+      /*  ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        if (result == PackageManager.PERMISSION_GRANTED) {
+       if (result == PackageManager.PERMISSION_GRANTED) {
             location = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {
                 latitude = location.getLatitude();
@@ -201,8 +207,8 @@ public class HospitalLocation extends AppCompatActivity implements OnMapReadyCal
                     e.printStackTrace();
                 }
             }
-        }
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_fragment);
+        }*/
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.hospitalLoc_Fragment);
         mapFragment.getMapAsync(this);
 
     }
@@ -217,7 +223,8 @@ public class HospitalLocation extends AppCompatActivity implements OnMapReadyCal
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Set location"));
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Select location"));
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         try {
@@ -251,10 +258,10 @@ public class HospitalLocation extends AppCompatActivity implements OnMapReadyCal
 //                        locationEditText.setText(addresses.get(0).getLocality() + ", " + addresses.get(0).getPostalCode());
                     } else if (locality != null) {
 //                        locationEditText.setText(addresses.get(0).getPostalCode());
-                    } else {
+                    }/* else {
 //                        locationEditText.setText(null);
 //                        locationEditText.setHint("Location not known ,please type pincode");
-                    }
+                    }*/
 
                 } catch (IOException e) {
                     Toast.makeText(HospitalLocation.this, "IOExcept", Toast.LENGTH_SHORT).show();
