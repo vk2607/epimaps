@@ -65,7 +65,7 @@ public class SubcribeDialog extends DialogFragment {
             @SuppressLint("WrongConstant")
             @Override
             public void onClick(View v) {
-                sendlink.setVisibility(1);
+                Toast.makeText(getActivity(), "The link has been sent to your email", Toast.LENGTH_SHORT).show();
             }
         });
         return view;

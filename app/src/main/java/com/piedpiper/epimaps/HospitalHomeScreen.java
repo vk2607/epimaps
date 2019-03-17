@@ -120,7 +120,7 @@ public class HospitalHomeScreen extends AppCompatActivity
            new AlertDialog.Builder(this)
                    .setIcon(null)
                    .setTitle("Logout")
-                   .setMessage("Are you sure, Do you want to logged out ?")
+                   .setMessage("Are you sure, Do you want to logout ?")
                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                        @Override
                        public void onClick(DialogInterface dialog, int which) {
