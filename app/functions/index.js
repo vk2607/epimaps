@@ -11,6 +11,7 @@
 
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const functions = require('firebase-functions');
+const Firestore = require('@google-cloud/firestore');
 const nodemailer = require('nodemailer');
 const admin = require('firebase-admin');
 
@@ -37,6 +38,43 @@ exports.sendEmail = functions.auth.user().onCreate(user => {
   return mailTransport.sendMail(mailOptions)
     .then(() => console.log('New user email sent'))
     .catch((error) => console.error('Error sending email: ', error));
+});
+
+exports.updateRegionCount = functions.firestore.document('Hospitals/{hospitalId}/Patients/{patientId}').onCreate((snap, context) => {
+  const data = snap.data();
+  const disease = data.diseases[0];
+  const pinCode = data.pinCode;
+  console.log('Hospital ID is ' + context.params.hospitalId);
+
+  const firestore = new Firestore();
+
+//   var update = {
+//   state: 'CA',
+//   country: 'USA'
+// };
+  // var setDoc = firestore.collection('Hospitals').doc(context.params.hospitalId).set(update);
+
+  var today = new Date();
+  var dd = String(today.getDate());
+  var mm = String(today.getMonth() + 1); //January is 0!
+  var yyyy = today.getFullYear();
+
+  var date = yyyy + '-' + mm + '-' + dd;
+
+  var transaction = firestore.runTransaction(t => {
+    return t.get(firestore.collection('Regions').doc(pinCode).collection('Diseases').doc(disease))
+      .then(doc => {
+        var newCurrent = doc.data().current + 1;
+        t.update(firestore.collection('Regions').doc(pinCode).collection('Diseases').doc(disease), {
+          [date]: newCurrent,
+          current: newCurrent
+        });
+      }).then(result => {
+        console.log('Transaction success!' );
+      }).catch(err => {
+        console.log('Transaction failure:', err);
+      });
+  });
 });
 
 // const auth = require('firebase-auth');
